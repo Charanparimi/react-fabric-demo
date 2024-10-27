@@ -1,6 +1,7 @@
 import * as fabric from 'fabric';
 import React, { useEffect, useRef, useState } from 'react';
 import SettingsTool from './SettingsTool';
+import Video from './Video';
 
 const Canvas = () => {
     const canvsRef = useRef(null);
@@ -59,7 +60,8 @@ const Canvas = () => {
         <button class="btn" onClick={addCircle}><i class="fa fa-circle"></i>Circle</button>
         <button class="btn" onClick={addRectangle}><i class="fa-solid fa-rectangle"></i>Rectangle</button>
         <canvas ref={canvsRef} width={600} height={400} />
-        <SettingsTool canvas={canvas} />        
+        <SettingsTool canvas={canvas} />  
+        <Video canvas={canvas} canvasRef={canvsRef} />      
         </>
     )
 };

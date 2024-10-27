@@ -1,3 +1,4 @@
+import { Input } from 'blocksin-system';
 import { useEffect, useState } from "react";
 
 function SettingsTool ({canvas}) {
@@ -40,7 +41,7 @@ function SettingsTool ({canvas}) {
 
         if(object.type === "rect")
         {
-            setWidth(Math.round(object.width * object.scalex));
+            setWidth(Math.round(object.width * object.scaleX));
             setHeight(Math.round(object.height * object.scaleY));
             setColor(object.fill);
             setDiameter("");
@@ -59,19 +60,62 @@ function SettingsTool ({canvas}) {
         setDiameter("");
     }
 
-    const handleWidthChange =(e) => {};
-    const handleHeightChange =(e) => {};
-    const handleDiameterChange =(e) => {};
-    const handleColorChange =(e) => {};
+    const handleWidthChange =(e) => {
+        const value = e.target.value.replace(/,/g,"");
+        const intValue = parseInt(value, 10);
+
+        setWidth(intValue);
+
+        if(selectedObject && selectedObject.type === "rect" && intValue >= 0)
+        {
+            selectedObject.set({ width: intValue / selectedObject.scaleX});
+            canvas.renderAll();
+        }
+    };
+    const handleHeightChange =(e) => {
+        const value = e.target.value.replace(/,/g,"");
+        const intValue = parseInt(value, 10);
+
+        setHeight(intValue);
+
+        if(selectedObject && selectedObject.type === "rect" && intValue >= 0)
+        {
+            selectedObject.set({ height: intValue / selectedObject.scaleY});
+            canvas.renderAll();
+        }
+    };
+    const handleDiameterChange =(e) => {
+        const value = e.target.value.replace(/,/g,"");
+        const intValue = parseInt(value, 10);
+
+        setDiameter(intValue);
+
+        if(selectedObject && selectedObject.type === "rect" && intValue >= 0)
+        {
+            selectedObject.set({ radius: intValue / 2 / selectedObject.scaleX});
+            canvas.renderAll();
+        }
+    };
+    const handleColorChange =(e) => {
+        const value = e.target.value;
+
+        setColor(value);
+
+        if(selectedObject)
+        {
+            selectedObject.set({ fill: value});
+            canvas.renderAll();
+        }
+    };
 
  return (
     <div className="Settings darkmode">
         {selectedObject && selectedObject.type === "rect" && (
             <>
-                <input label="Width" value={width} onChange={handleWidthChange} />
-                <input label="Height" value={height} onChange={handleHeightChange} />
-                <input label="Diametor" value={diameter} onChange={handleDiameterChange} />
-                <input label="Color" value={color} onChange={handleColorChange} />
+                <Input fluid label="Width" value={width} onChange={handleWidthChange} />
+                <Input fluid label="Height" value={height} onChange={handleHeightChange} />
+                {/* <Input fluid label="Diametor" value={diameter} onChange={handleDiameterChange} /> */}
+                <Input fluid label="Color" value={color} onChange={handleColorChange} />
             </>
         )}
     </div>
